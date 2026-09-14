@@ -1,4 +1,7 @@
-const  pool = require("../db");
+//const  pool = require("../db");
+//const pool = require("../config/database-config");
+
+const { db : pool } = require("../config/config.js");
 
 async function getSourceById(sourceId) {
     const result = await pool.query(

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const { port, environment } = require('./config/app-config');
+// const { port, environment } = require('./config/config.js');
+const { app: { port, environment } } = require('./config/config.js');
 const keywordRoutes = require('./routes/keyword-routes');
 const sourceRoutes = require('./routes/source-routes');
 const crawlRoutes = require('./routes/crawl-routes');

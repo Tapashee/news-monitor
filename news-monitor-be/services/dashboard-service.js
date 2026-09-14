@@ -1,4 +1,5 @@
-const pool = require("../config/database-config");
+// const pool = require("../config/database-config");
+const {db : pool} = require("../config/config.js");
 
 async function getDashboardStats() {
     const result = await pool.query(`

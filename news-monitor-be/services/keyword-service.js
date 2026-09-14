@@ -1,6 +1,6 @@
 //const pool = require("../db");
-const pool = require("../config/database-config");
-
+// const pool = require("../config/database-config");
+const { db: pool } = require("../config/config.js");
 async function getKeywords(){
     const result = await pool.query(`
         SELECT keyword_id, keyword 
