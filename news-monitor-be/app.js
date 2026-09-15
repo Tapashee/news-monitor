@@ -19,6 +19,8 @@ app.use('/api/crawl', crawlRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
+app.use(errorMiddleware);
+
 app.get("/", (req, res) => {
     res.send("News Monitor API is running...");
 });

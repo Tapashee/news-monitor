@@ -1,20 +1,22 @@
 const keywordService = require('../services/keyword-service');
 
-async function getKeywords(req, res) {
+async function getKeywords(req, res,next) {
     try {
         const keywords = await keywordService.getKeywords();
 
         res.status(200).json(keywords);
     } catch (error) {
-        console.error('Error getting keywords:', error);
+        // console.error('Error getting keywords:', error);
 
-        res.status(500).json({
-            error: 'Failed to get keywords',
-        });
+        // res.status(500).json({
+        //     error: 'Failed to get keywords',
+        // });
+
+        next(error);
     }
 }
 
-async function addKeyword(req, res) {
+async function addKeyword(req, res, next) {
     try {
         const { keyword } = req.body;
 
@@ -22,15 +24,16 @@ async function addKeyword(req, res) {
 
         res.status(201).json(newKeyword);
     } catch (error) {
-        console.error('Error adding keyword:', error);
+        // console.error('Error adding keyword:', error);
 
-        res.status(500).json({
-            error: 'Failed to add keyword',
-        });
+        // res.status(500).json({
+        //     error: 'Failed to add keyword',
+        // });
+        next(error);
     }
 }
 
-async function deleteKeyword(req, res) {
+async function deleteKeyword(req, res, next) {
     try {
         const { id } = req.params;
 
@@ -44,11 +47,12 @@ async function deleteKeyword(req, res) {
 
         res.status(200).json(deletedKeyword);
     } catch (error) {
-        console.error('Error deleting keyword:', error);
+        // // console.error('Error deleting keyword:', error);
 
-        res.status(500).json({
-            error: 'Failed to delete keyword',
-        });
+        // res.status(500).json({
+        //     error: 'Failed to delete keyword',
+        // });
+        next(error);
     }
 }
 

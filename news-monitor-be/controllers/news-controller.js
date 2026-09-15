@@ -1,6 +1,6 @@
 const newsService = require('../services/news-service');
 
-async function getNewsArticles(req, res) {
+async function getNewsArticles(req, res, next) {
     try {
 
         const articles = await newsService.getNewsArticles();
@@ -9,14 +9,17 @@ async function getNewsArticles(req, res) {
 
     } catch (error) {
 
-        console.error(
-            'Error fetching news articles:',
-            error
-        );
+        // console.error(
+        //     'Error fetching news articles:',
+        //     error
+        // );
 
-        res.status(500).json({
-            error: 'Failed to fetch news articles'
-        });
+        // res.status(500).json({
+        //     error: 'Failed to fetch news articles'
+        // });
+
+        next(error);
+
     }
 }
 
