@@ -95,7 +95,8 @@
 //     scrapeDailyStar,
 // };
 
-const axios = require("axios");
+// const axios = require("axios");
+const { fetchPage } = require("../http-client-service");
 const cheerio = require("cheerio");
 const { formatDate } = require("../../utils/date-formatter.js");
 
@@ -182,18 +183,20 @@ async function crawl(
                  * AbortController signal is passed
                  * to Axios.
                  */
-                const response = await axios.get(
-                    currentUrl,
-                    {
-                        signal
-                    }
-                );
+                // const response = await axios.get(
+                //     currentUrl,
+                //     {
+                //         signal
+                //     }
+                // );
 
 
-                const html = response.data;
+                // const html = response.data;
 
+                // const $ = cheerio.load(html);
+                
+                const html = await fetchPage(currentUrl, signal);
                 const $ = cheerio.load(html);
-
 
                 // -----------------------------------
                 // Extract article titles

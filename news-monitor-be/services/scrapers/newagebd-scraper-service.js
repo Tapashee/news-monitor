@@ -1,4 +1,5 @@
-const axios = require("axios");
+// const axios = require("axios");
+const { fetchPage } = require("../http-client-service");
 const cheerio = require("cheerio");
 const { formatDate } = require("../../utils/date-formatter.js");
 
@@ -85,15 +86,18 @@ async function crawl(
                  * AbortController signal is passed
                  * to Axios.
                  */
-                const response = await axios.get(
+                // const response = await axios.get(
+                //     currentUrl,
+                //     {
+                //         signal
+                //     }
+                // );
+
+
+                const html = await fetchPage(
                     currentUrl,
-                    {
-                        signal
-                    }
+                    signal
                 );
-
-
-                const html = response.data;
 
                 const $ = cheerio.load(html);
 

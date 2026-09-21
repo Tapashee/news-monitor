@@ -1,83 +1,5 @@
 // const axios = require("axios");
-// const cheerio = require("cheerio");
-// const { formatDate } = require('../../utils/date-formatter.js');
-
-// const articles = [];
-
-// async function scrapeProthomAlo(keywords, homepageUrl){
-//     await crawl(keywords,homepageUrl);
-//     return articles;
-// }
-
-// async function crawl(keywords,homepageUrl) {
-//     const queue = [homepageUrl];
-//     const visited = new Set([homepageUrl]);
-//     const baseUrl = new URL(homepageUrl);
-
-//     while (queue.length > 0) {
-//         const currentUrl = queue.shift();
-
-//         console.log('Crawling:', currentUrl);
-
-//         try {
-//             const response = await axios.get(currentUrl);
-//             const html = response.data;
-//             const $ = cheerio.load(html);
-
-//             // Extract articletitlesand publication info
-//             $('h1').each((index, element)=> {
-//                 const articleTitle = $(element).text().trim();
-
-//                 const matched = keywords.some(k =>
-//                     articleTitle.toLowerCase().includes(k.keyword.toLowerCase())
-//                 );
-
-//                 if(articleTitle && matched) {
-//                     const publicationInfo = $('.time-social-share-wrapper time')
-//                                             .first()
-//                                             .attr('datetime')
-                    
-//                     console.log('Article Title:', articleTitle);
-//                     console.log('Published at:', formatDate(publicationInfo));
-
-//                     const article = {
-//                         title: articleTitle,
-//                         news_link: currentUrl,
-//                         published_at: formatDate(publicationInfo)
-//                     }
-//                     articles.push(article);
-//                 }
-//             });
-
-//             $('a[href]').each((index, element) => {
-//                 const href = $(element).attr('href');
-
-//                 if (!href) {
-//                     return;
-//                 }
-
-//                 const url = new URL(href, homepageUrl);
-
-//                 if (
-//                     url.hostname === baseUrl.hostname &&
-//                     !visited.has(url.href)
-//                 ) {
-//                     console.log('Discovered:', url.href);
-//                     visited.add(url.href);
-//                     queue.push(url.href);
-//                 }
-//             });
-//         } catch (err) {
-//             console.log('Error scraping Prothom Alo:', err.message);
-//         }
-//     }
-// }
-
-// module.exports = {
-//     scrapeProthomAlo
-// };
-
-const axios = require("axios");
+const { fetchPage } = require("../http-client-service");
 const cheerio = require("cheerio");
 const { formatDate } = require("../../utils/date-formatter.js");
 
@@ -170,15 +92,15 @@ async function crawl(
                  * Pass AbortController signal
                  * to Axios.
                  */
-                const response = await axios.get(
-                    currentUrl,
-                    {
-                        signal
-                    }
-                );
+                // const response = await axios.get(
+                //     currentUrl,
+                //     {
+                //         signal
+                //     }
+                // );
 
 
-                const html = response.data;
+                const html = await fetchPage(currentUrl, signal);
 
                 const $ = cheerio.load(html);
 

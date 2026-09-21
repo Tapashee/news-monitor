@@ -1,4 +1,5 @@
-const axios = require("axios");
+// const axios = require("axios");
+const { fetchPage } = require("../http-client-service");
 const cheerio = require("cheerio");
 const { formatDate } = require("../../utils/date-formatter.js");
 
@@ -42,12 +43,7 @@ async function crawl(
 
     while (queue.length > 0) {
 
-        /*
-         * Check whether the crawl has been aborted
-         * before processing the next level.
-         */
         if (signal?.aborted) {
-
             throw new Error("AbortError");
         }
 
@@ -62,11 +58,7 @@ async function crawl(
 
         for (let i = 0; i < qLen; i++) {
 
-            /*
-             * Check before processing each URL.
-             */
             if (signal?.aborted) {
-
                 throw new Error("AbortError");
             }
 
@@ -81,19 +73,10 @@ async function crawl(
 
             try {
 
-                /*
-                 * AbortController signal is passed
-                 * to Axios.
-                 */
-                const response = await axios.get(
+                const html = await fetchPage(
                     currentUrl,
-                    {
-                        signal
-                    }
+                    signal
                 );
-
-
-                const html = response.data;
 
                 const $ = cheerio.load(html);
 
@@ -109,6 +92,7 @@ async function crawl(
                             $(element)
                                 .text()
                                 .trim();
+
 
                         const matched =
                             keywords.some(
@@ -138,15 +122,20 @@ async function crawl(
                             matched
                         ) {
 
-                            const publicationInfo = $("span.publishedTime")
-                                            .text()
-                                            .replace("Published:", "")
-                                            .trim();
+                            const publicationInfo =
+                                $("span.publishedTime")
+                                    .text()
+                                    .replace(
+                                        "Published:",
+                                        ""
+                                    )
+                                    .trim();
+
 
                             const publishedAt =
                                 formatDate(
                                     publicationInfo
-                                );s
+                                );
 
 
                             console.log(
@@ -188,11 +177,6 @@ async function crawl(
                 $("a[href]").each(
                     (index, element) => {
 
-                        /*
-                         * Check whether the crawl
-                         * was aborted while processing
-                         * the page.
-                         */
                         if (signal?.aborted) {
                             return;
                         }
@@ -214,10 +198,6 @@ async function crawl(
                             );
 
 
-                        /*
-                         * Only follow links belonging
-                         * to the same hostname.
-                         */
                         if (
                             url.hostname ===
                                 baseUrl.hostname &&
@@ -245,10 +225,6 @@ async function crawl(
 
             } catch (err) {
 
-                /*
-                 * Axios throws CanceledError when
-                 * the request is aborted.
-                 */
                 if (
                     err.name === "CanceledError" ||
                     err.name === "AbortError" ||
@@ -263,9 +239,6 @@ async function crawl(
                 }
 
 
-                /*
-                 * Normal scraping error.
-                 */
                 console.log(
                     "Error scraping Daily Sun:",
                     err.message
